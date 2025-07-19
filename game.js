@@ -31,7 +31,17 @@ function game() {
   }
 }
 
-game();
+let body = document.querySelector('body');
+
+body.addEventListener("click", (event) => {
+  
+  if (event.target.localName == 'button') {
+    console.log(playRound(event.target.textContent.toLowerCase(), computerPlay()));
+  }
+
+});
+
+//game();
 
 // For Test
 // const playerSelection = "rock";
