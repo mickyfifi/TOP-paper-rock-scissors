@@ -13,16 +13,16 @@ function computerPlay() {
 function playRound(playerSelection, computerSelection) {
   playerSelection = playerSelection.toLowerCase();
   if (playerSelection == computerSelection) {
-    return "Draw!";
+    return "draw";
   }
   if (playerSelection == "rock" && computerSelection == "scissors"
       || playerSelection == "paper" && computerSelection == "rock"
       || playerSelection == "scissors" && computerSelection == "paper"
       ) {
-        return `You Win! ${playerSelection} beats ${computerSelection}`;
+        return "win";
   }
   
-  return `You Lose! ${computerSelection} beats ${playerSelection}`;
+  return "lose";
 }
 
 function game() {
@@ -31,15 +31,63 @@ function game() {
   }
 }
 
-let body = document.querySelector('body');
+const body = document.querySelector('body');
+const playerScore = document.querySelector('#player-score');
+const computerScore = document.querySelector('#computer-score');
+const resultElement = document.querySelector('#result');
+const winnerElement = document.querySelector('#winner');
+let winner = "";
+
+function checkWin(playerScore, computerScore) {
+  if (playerScore == 5) {
+    return "player";
+  }
+
+  if (computerScore == 5) {
+    return "computer";
+  }
+
+  return "";
+}
+
 
 body.addEventListener("click", (event) => {
+
+  if (winner) {
+    return;
+  }
+
+  const playerSelection = event.target.textContent.toLowerCase();
+  const computerSelection = computerPlay();
   
   if (event.target.localName == 'button') {
-    console.log(playRound(event.target.textContent.toLowerCase(), computerPlay()));
+    const result = playRound(playerSelection, computerSelection);
+
+    switch(result) {
+      case 'draw':
+        resultElement.textContent = 'Draw!';
+        break;
+      case 'win':
+        playerScore.textContent = parseInt(playerScore.textContent) + 1;
+        resultElement.textContent = `Player +1 Score! ${playerSelection} beats ${computerSelection}`;
+        
+        break;
+      case 'lose':
+        computerScore.textContent = parseInt(computerScore.textContent) + 1;
+        resultElement.textContent = `Computer +1 Score! ${computerSelection} beats ${playerSelection}`;
+        break;
+    }
+
+    winner = checkWin(parseInt(playerScore.textContent), parseInt(computerScore.textContent));
+
+    if (winner) {
+      winnerElement.textContent = `${winner} Wins`;
+    }
   }
 
 });
+
+
 
 //game();
 
